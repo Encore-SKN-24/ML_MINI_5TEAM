@@ -17,13 +17,15 @@
 - (예: 5TEAM / 팀명)
 
 ## 1-2. 팀원 구성 및 GitHub
+
 | 이름 | 역할 | GitHub |
 | --- | --- | --- |
-| 김민준 | • (담당 업무) | https://github.com/miin-jun |
-| 김유진 | • (담당 업무) | https://github.com/shortcut-2 |
-| 김지원 | • (담당 업무) | https://github.com/edu-ai-jiwon |
-| 박세현 | • (담당 업무) | https://github.com/parksay |
-| 임정희 | • (담당 업무) | https://github.com/bigmoooon |
+| 김민준 | • Pandas 활용 데이터 전처리<br>• Matplotlib 활용 데이터 시각화 | https://github.com/miin-jun |
+| 김유진 | • Pandas 활용 데이터 전처리<br>• Matplotlib, Seaborn 활용 데이터 시각화<br>• scikit-learn 활용 머신러닝 (KMeans) | https://github.com/shortcut-2 |
+| 김지원 | • QGIS 통한 하천 거리 및 규모 등급 전처리<br>• 하천 데이터 CSV 전처리<br>• 머신러닝(모델: 미정) | https://github.com/edu-ai-jiwon |
+| 박세현 | • 지역구 코드 전처리<br>• 지역구 면적 데이터 수집 | https://github.com/parksay |
+| 임정희 | • 지역 코드 데이터 수집<br>• 침수 면적 데이터 크롤링<br>• 강수량 데이터 전처리<br>• 전처리 데이터 통합 및 가공<br>• 머신러닝 시각화 | https://github.com/bigmooon |
+
 
 ---
 
@@ -74,7 +76,28 @@
 | **Visualization** | ![Matplotlib](https://img.shields.io/badge/matplotlib-black?style=for-the-badge&logo=matplotlib&logoColor=white) ![Seaborn](https://img.shields.io/badge/seaborn-darkblue?style=for-the-badge&logo=seaborn&logoColor=white) |
 ---
 
-**# 4. WBS 및 폴더 구조**
+## 4. 폴더 구조
+
+```bash
+ML_MINI_5TEAM/
+├── data/
+│   ├── raw/                # 크롤링/원본 데이터
+│   ├── processed/          # 전처리/가공된 데이터
+│   └── data.json           # 최종 통합 파일
+│
+├── src/                    # 소스 코드
+│   └── features/           # 개인 작업 공간 분리
+│       └── ljh/            # 본인 이니셜 폴더 (예: kmj, lyj ...)
+│           ├── crawl_??.py
+│           └── transform_??.py
+│
+├── docs/
+│   └── git_strategy.md     # 협업 규칙/브랜치 전략 문서
+├── main.py                 # 머신러닝 및 시각화 실행 파일
+├── requirements.txt        # 의존성 관리
+├── .gitignore
+└── README.md
+```
 
 ---
 
@@ -200,15 +223,49 @@
 
 ---
 
-**# 7. 데이터 전처리 및 통합**
+## 7. 데이터 전처리 및 통합
 
-**## 7-1. 하천(RIV) 데이터** 
+### 7-1. 하천(RIV) 데이터 전처리
+
+- **목표**: 시군구 단위로 하천 인접성/규모를 반영한 파생변수 생성  
+  - `RIV_DIS_MIN` : 하천까지 최소 거리  
+  - `RIV_DIS_GRD` : 거리 기반 위험 등급(1~5)  
+  - `RIV_GRD` : 하천 규모 기반 등급
+
+- **QGIS 처리**
+  - 시군구 경계 포인트 ↔ 하천 중심선에 대해 “허브까지의 거리”로 **최소 거리(`RIV_DIS_MIN`)** 산출
+  - 필드 계산기로 거리 등급(`RIV_DIS_GRD`) 생성
+
+```sql
+CASE
+WHEN "RIV_DIS_MIN" > 1500 THEN 1
+WHEN "RIV_DIS_MIN" > 700  THEN 2
+WHEN "RIV_DIS_MIN" > 300  THEN 3
+WHEN "RIV_DIS_MIN" > 100  THEN 4
+ELSE 5
+END 
+```
 
 
 
-**## 7-2. 데이터**
+**### 7-2. 강수량/시설/토양 배수 등급 데이터 전처리**
 
-**## 7-3. 데이터**
+- **공통 처리**
+  - 분석에 필요한 컬럼만 선택하여 사용(필요 컬럼 필터링)
+  - 지역 매칭을 위해 시도/시군구 컬럼명 통일
+
+- **강수량 데이터 (`RAIN_TOTAL`)**
+  - 결측값(NaN)은 “해당 기간 강수 관측 없음(=0)”으로 보고 **0으로 대체**
+  - 지역 ID 등 **핵심 키 결측**은 삭제 처리
+
+- **배수 펌프장 데이터 (`PUMP_CNT`)**
+  - 시도명/시군구명을 기준으로 그룹화 후 **지역별 펌프장 개수 집계**
+  - 컬럼명 표준화: `SIDO_N`, `SIGUNGU_N`, `PUMP_CNT`
+
+**### 7-3. 데이터 통합(merge)**
+
+- 시군구 단위 예측을 위해 모든 데이터를 **SIGUNGU(시군구 코드/명)** 기준으로 결합
+- 각 데이터셋에서 컬럼명을 통일한 뒤 **순차적으로 merge**하여 최종 학습 데이터셋을 구성
 
 ---
 
@@ -231,13 +288,43 @@
 
 ---
 
-**# 9. 머신러닝**
+## 9. 머신러닝
 
-**## 8-1. 모델**
+### 9-1. XGBoost Classification
 
-**## 8-2. 성능 고도화**
+#### 1) 모델 선택 근거
+- **Feature Importance**를 제공하여 침수 취약도에 영향을 미치는 요인을 정량적으로 해석 가능
+- 비선형 관계 및 변수 간 **복잡한 상호작용**을 효과적으로 학습
+- 규제(regularization) 및 트리 기반 부스팅 특성으로 **과적합 완화** 및 성능 향상 기대
+![XGBOOST](XGBOOST.png)
 
----
+#### 2) Base Model 학습 결과
+- **Train Accuracy**: 1.0000 (100.00%)
+- **Test Accuracy**: 0.9992 (99.92%)
+- **Weighted F1-Score**: 0.9992
+
+기본 모델에서도 Test Set에서 높은 성능을 보였으나, **Train Accuracy가 100%**로 나타나 과적합 가능성이 존재한다고 판단하였다.  
+이에 따라 하이퍼파라미터 최적화를 통해 **일반화 성능 개선**을 시도하였다.
+![XGBOOST](XGBOOST2.png)
+
+#### 3) 하이퍼파라미터 최적화
+- **탐색 방법**: `RandomizedSearchCV`
+- **교차 검증**: 3-Fold *Stratified* Cross-Validation
+- **평가 지표**: Weighted F1-Score
+- **탐색 반복**: 100회 랜덤 샘플링
+
+
+![XGBOOST](XGBOOST3.png)
+
+최적화 결과, **Weighted F1-Score가 0.9996**까지 향상되었다.
+
+### 9-1-2. RandomForest
+
+### 9-1-3. 군집 분석 (KMeans)
+
+
+
+
 
 **# 10. 한 줄 회고**
 
@@ -247,9 +334,14 @@
 
 - 김지원: 공간 데이터 분석 과정 중 하천 중심선과 시군구 경계 데이터를 어떻게 활용해야 할지 고민했었다. 위치 정보와 행정 단위를 연결하는 과정이 처음에 명확히 이해되지 않았으나 QGIS를 통해 거리 계산하니 조금 더 쉽게 눈에 담을 수 있었다. 하천까지의 최소 거리가 개별 좌표 값에서 시군구 단위의 지표로 변환되는 과정을 거치며 공간 데이터는 단독으로 의미를 가지기 어렵다는 것을 체감했다. 
 
-- 박세현: 
-- 임정희:
+- 박세현:  온라인에 많은 데이터가 흩어져 있더라도 기준이나 형태가 제각각이라 함께 통합해서 쓴다는 게 어렵다는 걸 느꼈고 머신러닝은 데이터 싸움이라는 말이 공감이 갔다
+
+- 임정희: 결측치 등을 납득할 수 있는 형태로 만드는 것이 가장 어려웠습니다. 학습 및 예측에 따라서 팀원들이 인정할만한 데이터 전처리를 할 수 있도록 연습하는 시간이 된 것 같습니다.
 
 ---
 
 **# 11. 출처**
+
+- **국가기본도_하천중심선**: 국토교통부의 ‘V-WORLD’
+- 시군구경계: 국토교통부의 ‘V-WORLD’
+- 지역구별 면적: 국토교통부 통계누리
