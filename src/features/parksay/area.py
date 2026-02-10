@@ -39,17 +39,12 @@ def get_merged_area_csv():
     # 3. 데이터 병합 ( _SIDO 기준)
     df_merged = pd.merge(df_sido, df_sigungu, on=_SIDO, how='inner')
 
-    # 4. 지역구별 면적 피처 추가
-    df_size = pd.read_csv(_PROJECT_ROOT/"data/raw/size.csv", usecols=[_SIDO_NAME, _SIGUNGU_NAME, "AREA_SIZE"])
-    df_merged = pd.merge(df_merged, df_size, on=[_SIDO_NAME, _SIGUNGU_NAME], how='left')
-
-
-    # 5. 전체 지역명 피처 추가 (시도 + 시군구)
+    # 4. 전체 지역명 피처 추가 (시도 + 시군구)
     df_merged['AREA_NAME'] = df_merged[_SIDO_NAME] + " " + df_merged[_SIGUNGU_NAME]
 
-    # 6. CSV 파일로 저장 
+    # 5. CSV 파일로 저장 
     os.makedirs(os.path.dirname(_PATH_OUTPUT), exist_ok=True) # 저장 폴더가 없다면 생성
     df_merged.to_csv(_PATH_OUTPUT, index=False) # csv 파일에 인덱스 제외
 
-    # 7. 인덱스 초기화된 데이터프레임 반환
+    # 6. 인덱스 초기화된 데이터프레임 반환
     return df_merged.reset_index(drop=True)
