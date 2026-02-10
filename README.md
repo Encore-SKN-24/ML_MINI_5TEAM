@@ -1,33 +1,70 @@
- 2. 프로젝트 개요
-2-1. 프로젝트명
+# Flooding Risk Prediction
 
-침수 피해 예상 지역 예측 (강우·지형·하천 인접도 기반 머신러닝)
+# 🌧️ 침수 피해 예상 지역 예측 (Machine Learning)
 
-2-2. 배경
+## 강수·지형·하천·토지이용 등 생활환경 데이터를 활용한 침수 위험지역 예측
 
-본 프로젝트 아이디어는 “비는 매년 오는데, 왜 피해는 반복되는가?”라는 문제의식에서 출발하였다.
+---
 
-![프로젝트](뉴스1.png)
+## 📅 프로젝트 기간
+- 2026.02.04(요일) ~ 2026.02.11(요일)
 
-최근 몇 년간 한국 전역에서 **집중호우(국지성 폭우)**가 빈번해지면서, 도심 저지대·하천 인접 지역·배수 취약 지역을 중심으로 침수 피해가 반복되고 있다. 같은 도시 안에서도 어떤 구역은 잠기고, 어떤 구역은 비교적 안전한 모습을 보이는데, 이는 침수가 단순히 “비의 양”만으로 결정되지 않고 지형·토지이용·배수·하천과의 관계 같은 공간적 조건이 함께 작동한다는 점을 보여준다.
+---
 
-우리는 특히 침수 발생이 다음과 같은 조건에서 더 쉽게 발생할 수 있다는 점에 주목하였다.
+# 1. 팀 소개
 
-지형 요인: 저지대/경사도/유역 형태 등 물이 모이기 쉬운 구조
+## 1-1. 팀명
+- (예: 5TEAM / 팀명)
 
-수문 요인: 하천과의 거리, 하천 범람 가능성, 주변 수계 밀도
+## 1-2. 팀원 구성 및 GitHub
+| 이름 | 역할 | GitHub |
+| --- | --- | --- |
+| (이름) | • (담당 업무) | (링크) |
+| (이름) | • (담당 업무) | (링크) |
+| (이름) | • (담당 업무) | (링크) |
+| (이름) | • (담당 업무) | (링크) |
+| (이름) | • (담당 업무) | (링크) |
 
-도시·환경 요인: 불투수면(포장면) 비율, 배수 인프라 밀도, 토지이용(주거/상업/농경지)
+---
 
-기상 요인: 단시간 강우량, 누적 강우량, 강우 지속시간
+# 2. 프로젝트 개요
 
-즉, 침수는 “폭우가 오면 무조건 발생”하는 사건이라기보다, 물의 흐름이 특정 지점에 집중되는 구조와 도시의 취약성이 겹칠 때 피해로 이어진다.
-이에 본 프로젝트는 반복되는 침수 피해를 단순 사례로 소비하는 수준에서 벗어나, 다양한 공간·환경 요인을 결합해 침수 피해가 발생할 가능성이 높은 지역을 사전에 예측하는 문제로 확장하고자 하였다.
+## 2-1. 프로젝트명
+**침수 피해 예상 지역 예측**
 
-2-3. 목표
+## 2-2. 배경
+- (침수 피해 증가, 집중호우, 도시화/불투수면 증가 등 문제의식)
+- (기존 대응의 한계: 사후 대응, 지역별 취약성 파악 어려움)
+- (데이터 기반 위험지역 예측의 필요성)
 
-한국 전역을 대상으로 침수 관련 데이터를 결합하여 침수 위험(또는 침수 발생) 예측 모델을 구축한다.
+> (관련 기사/리포트/통계 이미지나 링크가 있다면 여기에 첨부)
+> 예: ![image](링크)
 
-예측 결과를 지도 기반으로 시각화하여 위험 지역을 직관적으로 제시한다.
+## 2-3. 프로젝트 소개 및 목표
+본 프로젝트는 **지역별 기상·지형·수계(하천)·환경 요인**을 결합하여  
+**침수 발생 가능성이 높은 지역(또는 위험등급)을 예측**하는 것을 목표로 한다.
 
-학습 과정에서 중요하게 작용한 요인을 분석해, “어떤 조건이 침수 위험을 키우는가”에 대한 해석 가능성을 확보한다.
+- 목표 1: (예: 침수 여부 분류 / 침수 위험등급 예측)
+- 목표 2: (예: 주요 위험 요인(feature) 도출 및 해석)
+- 목표 3: (예: 지도 기반 시각화/인사이트 도출)
+
+---
+
+# 3. 기술 스택
+
+## 🛠 Tech Stack
+| Category | Stack |
+|----------|--------|
+| **Language** | ![Python](https://img.shields.io/badge/python-blue?style=for-the-badge&logo=python&logoColor=white) |
+| **Data Processing** | ![Pandas](https://img.shields.io/badge/pandas-yellow?style=for-the-badge&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/numpy-lightblue?style=for-the-badge&logo=numpy&logoColor=white) |
+| **ML** | ![scikit-learn](https://img.shields.io/badge/scikit--learn-orange?style=for-the-badge&logo=scikit-learn&logoColor=white) |
+| **Visualization** | ![Matplotlib](https://img.shields.io/badge/matplotlib-black?style=for-the-badge&logo=matplotlib&logoColor=white) ![Seaborn](https://img.shields.io/badge/seaborn-darkblue?style=for-the-badge&logo=seaborn&logoColor=white) |
+| **Geo (Optional)** | ![GeoPandas](https://img.shields.io/badge/geopandas-2E8B57?style=for-the-badge) ![Folium](https://img.shields.io/badge/folium-white?style=for-the-badge&logo=folium&logoColor=black) |
+
+---
+
+# 4. WBS 및 폴더 구조
+
+> (WBS 이미지/표가 있다면 여기에 첨부)
+> 예: ![wbs](링크)
+
