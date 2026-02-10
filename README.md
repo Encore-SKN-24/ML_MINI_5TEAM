@@ -319,6 +319,22 @@ END
 
 ### 9-1-2. RandomForest
 
+#### 1) 모델 선택 근거
+- 다수의 결정트리를 앙상블로 결합하는 방식으로 비선형 관계 및 변수 간 상호작용을 학습 가능
+- class_weight="balanced" 설정을 통해 클래스 불균형(침수 발생/미발생 비율 차이) 상황에서도 학습 편향을 줄이도록 설계
+
+#### 2) Base Model 학습 및 평가
+- **Train/Test Split**
+- test_size=0.2, random_state=42
+- 클래스 비율 유지를 위해 stratify=y 적용
+- **RandomForest 설정**
+- n_estimators=300
+- class_weight="balanced"
+
+#### 3) 결과 해석 포인트
+- stratify=y와 class_weight="balanced"를 통해 침수 발생 여부(0/1) 불균형 문제를 완화하면서 학습을 진행
+- FLOOD_AREA, FLOOD_GRD, DEAD 등은 피해 결과를 직접 반영할 수 있는 변수로 판단
+
 ### 9-1-3. 군집 분석 (KMeans)
 
 - 군집의 장점인 간단한 개념과 구현, 대용량 데이터에서도 활용 가능한 점을 토대로 KMeans 모델을 활용
