@@ -16,7 +16,6 @@ def add_size_feature(df_main=None):
     _SIDO = "SIDO_NAME"
     _SIGUNGU = "SIGUNGU_NAME"
 
-
     # 넣어주는 파라미터 없으면 area 불러오기
     if df_main is None:
         df_main = get_merged_area_csv()
@@ -32,7 +31,6 @@ def add_size_feature(df_main=None):
     df_size[_SIGUNGU] = df_size[_SIGUNGU].str.replace(r".*시\s*(\S*구)", r"\1", regex=True)
     df_size[_SIGUNGU] = df_size[_SIGUNGU].str.replace(r"(.*시) 전체", r"\1", regex=True)
 
-    print(df_size[df_size[_SIGUNGU].str.contains("부천")])
     # 예외 처리
     exceptions = {"세종특별자치시": "세종특별자치시"} # 더 추가 가능
     for sido, sigungu in exceptions.items(): 
