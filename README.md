@@ -322,10 +322,13 @@ END
 #### 1) 모델 선택 근거
 - 다수의 결정트리를 앙상블로 결합하는 방식으로 비선형 관계 및 변수 간 상호작용을 학습 가능
 - class_weight="balanced" 설정을 통해 클래스 불균형(침수 발생/미발생 비율 차이) 상황에서도 학습 편향을 줄이도록 설계
+<img width="646" height="267" alt="RandomForest1" src="https://github.com/user-attachments/assets/c1a2ee94-1fce-408c-9bc1-c45a41dfb42c" />
 
 #### 2) Base Model 학습 및 평가
 - **Train/Test Split**
 - test_size=0.2, random_state=42
+<img width="978" height="274" alt="RandomForest2" src="https://github.com/user-attachments/assets/e519aca4-6a60-43b1-b9d5-a9bbba2165a1" />
+  
 - 클래스 비율 유지를 위해 stratify=y 적용
 - **RandomForest 설정**
 - n_estimators=300
